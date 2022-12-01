@@ -1,17 +1,24 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
-    }
+    check(getTopNLargestCalorieSum(readInput("Day01_test"), 1) == 24000L)
+    check(getTopNLargestCalorieSum(readInput("Day01_test"), 3) == 45000L)
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
+    println("Top 1 is: " + getTopNLargestCalorieSum(readInput("Day01"), 1))
+    println("Top 3 are: " + getTopNLargestCalorieSum(readInput("Day01"), 3))
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+}
 
-    val input = readInput("Day01")
-    println(part1(input))
-    println(part2(input))
+fun getTopNLargestCalorieSum(input: List<String>, n: Int): Long {
+    val sum = input.fold(mutableListOf<MutableList<Long>>()) { list, item ->
+        list.apply {
+            if (item.isEmpty()) {
+                add(mutableListOf())
+            } else if (this.isEmpty()) {
+                add(mutableListOf(item.toLong()))
+            } else {
+                last().add(item.toLong())
+            }
+        }
+    }.map { it.sum() }.sortedDescending().take(n).sum()
+
+    return sum
 }
